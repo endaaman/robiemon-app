@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  robiemon-client:
+    image: endaaman/robiemon-client
+    container_name: robiemon-client
+    restart: always
+    environment:
+      - PUBLIC_UPSTREAM_URL_BASE=http://robiemon-server:3000
+    networks:
+      - robiemon
+
+  robiemon-server:
+    image: endaaman/robiemon-server
+    container_name: robiemon-server
+    restart: always
+    volumes:
+      - data:/app/data
+    networks:
+      - robiemon
+
+
+  robiemon-web:
+    image: nginx:1.17
+    container_name: robiemon-web
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - robiemon
+
+volumes:
+  data:
+
+networks:
+  robiemon:
